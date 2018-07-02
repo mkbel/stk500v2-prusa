@@ -721,13 +721,14 @@ void pinsToDefaultState(void)
 	address_t flashAddressLast = 0; //last written flash address
 	int flashOperation = 0; //current flash operation (0-nothing, 1-write, 2-verify)
 
-#define RAMSIZE        0x2000
-#define boot_src_addr  (*((uint32_t*)(RAMSIZE - 16)))
-#define boot_dst_addr  (*((uint32_t*)(RAMSIZE - 12)))
-#define boot_copy_size (*((uint16_t*)(RAMSIZE - 8)))
-#define boot_reserved  (*((uint8_t*)(RAMSIZE - 6)))
-#define boot_app_flags (*((uint8_t*)(RAMSIZE - 5)))
-#define boot_app_magic (*((uint32_t*)(RAMSIZE - 4)))
+#define RAMSIZE         0x2000
+#define boot_src_addr   (*((uint32_t*)(RAMSIZE - 16)))
+#define boot_src_addr16 (*((uint16_t*)(RAMSIZE - 16)))
+#define boot_dst_addr   (*((uint32_t*)(RAMSIZE - 12)))
+#define boot_copy_size  (*((uint16_t*)(RAMSIZE - 8)))
+#define boot_reserved   (*((uint8_t*)(RAMSIZE - 6)))
+#define boot_app_flags  (*((uint8_t*)(RAMSIZE - 5)))
+#define boot_app_magic  (*((uint32_t*)(RAMSIZE - 4)))
 #define BOOT_APP_FLG_ERASE 0x01
 #define BOOT_APP_FLG_COPY  0x02
 #define BOOT_APP_FLG_FLASH 0x04
@@ -798,7 +799,7 @@ int main(void)
 						if (boot_app_flags & BOOT_APP_FLG_FLASH)
 							word = pgm_read_word_far(boot_src_addr); //from FLASH
 						else
-							word = *((uint16_t*)boot_src_addr); //from RAM
+							word = boot_src_addr16; //from RAM
 						boot_page_fill(address, word);
 						address	+= 2;
 						boot_src_addr += 2;
